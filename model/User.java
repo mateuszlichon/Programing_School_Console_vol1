@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -117,6 +118,24 @@ public class User {
 	
 	public boolean checkPassword(String password) {
 		return BCrypt.checkpw(password, this.password);
+	}
+	
+	public static User[] loadAllUsers(Connection conn) throws SQLException {
+		ArrayList<User> users = new ArrayList<User>();
+		String sql = "SELECT * FROM users";
+		PreparedStatement ps = conn.prepareStatement(sql);
+		ResultSet rs = ps.executeQuery();
+		while (rs.next()) {
+			User loadedUser = new User();
+			loadedUser.id = rs.getLong("id");
+			loadedUser.username = rs.getString("username");
+			loadedUser.password = rs.getString("password");
+			loadedUser.email = rs.getString("email");
+			users.add(loadedUser);
+		}
+		User[] uArray = new User[users.size()];
+		uArray = users.toArray(uArray);
+		return uArray;
 	}
 	
 }

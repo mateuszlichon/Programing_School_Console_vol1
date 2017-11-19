@@ -11,10 +11,16 @@ public class UserApp {
 		Connection conn = null;
 		try {
 			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/warsztat2?useSSL=false", "root", "coderslab");
-			User user3 = User.getUserById(conn, 3);
+			
+			User[] users = User.loadAllUsers(conn);
+			System.out.println("rozmiar tablicy to: " + users.length);
+			System.out.println(users[2].getUsername());
+			
+			//testowanie getUserById
+			/*User user3 = User.getUserById(conn, 3);
 			System.out.println(user3.getUsername());
 			System.out.println(user3.getPassword());
-			System.out.println(User.getUserById(conn, 5).getEmail());
+			System.out.println(User.getUserById(conn, 7).getEmail());*/
 			
 			
 			//testowanie saveToDB
