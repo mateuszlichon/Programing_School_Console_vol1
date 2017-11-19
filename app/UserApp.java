@@ -14,7 +14,8 @@ public class UserApp {
 			
 			User[] users = User.loadAllUsers(conn);
 			System.out.println("rozmiar tablicy to: " + users.length);
-			System.out.println(users[2].getUsername());
+			System.out.println(users[1].getUserGroupId());
+			System.out.println(users[0].getEmail());
 			
 			//testowanie getUserById
 			/*User user3 = User.getUserById(conn, 3);

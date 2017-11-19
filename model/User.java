@@ -111,6 +111,7 @@ public class User {
 			loadedUser.username = rs.getString("username");
 			loadedUser.password = rs.getString("password");
 			loadedUser.email = rs.getString("email");
+			loadedUser.userGroupId = rs.getInt("user_group_id");
 			return loadedUser;
 		}
 		return null;
@@ -122,7 +123,7 @@ public class User {
 	
 	public static User[] loadAllUsers(Connection conn) throws SQLException {
 		ArrayList<User> users = new ArrayList<User>();
-		String sql = "SELECT * FROM users";
+		String sql = "SELECT * FROM users;";
 		PreparedStatement ps = conn.prepareStatement(sql);
 		ResultSet rs = ps.executeQuery();
 		while (rs.next()) {
@@ -131,11 +132,24 @@ public class User {
 			loadedUser.username = rs.getString("username");
 			loadedUser.password = rs.getString("password");
 			loadedUser.email = rs.getString("email");
+			loadedUser.userGroupId = rs.getInt("user_group_id");
 			users.add(loadedUser);
 		}
 		User[] uArray = new User[users.size()];
 		uArray = users.toArray(uArray);
 		return uArray;
+	}
+	
+	public void delete(Connection conn) throws SQLException {
+		if (this.id != 0) {
+			String sql = "DELETE FROM users WHERE id = ?;";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setLong(1, this.id);
+			ps.executeUpdate();
+			this.id = 0;
+		} else {
+			System.out.println("Nie ma takiego użytkownika w bazie danych");
+		}
 	}
 	
 }
