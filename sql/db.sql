@@ -13,14 +13,14 @@ PRIMARY KEY(id),
 FOREIGN KEY(user_group_id) REFERENCES user_group(id));
 
 CREATE TABLE excercise(
-  id INT(11),
+  id INT(11) AUTO_INCREMENT,
   title VARCHAR(255),
   description TEXT,
   PRIMARY KEY(id)
 );
 
 CREATE TABLE solution(
-  id INT(11),
+  id INT(11) AUTO_INCREMENT,
   created DATETIME,
   updated DATETIME,
   description TEXT,
