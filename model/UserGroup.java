@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class UserGroup {
 	private int id;
@@ -42,6 +43,12 @@ public class UserGroup {
 			if (rs.next()) {
 				this.id = rs.getInt(1);
 			}
+		} else {
+			String sql = "UPDATE user_group SET name = ? WHERE id = ?;";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, this.name);
+			ps.setInt(2, this.id);
+			ps.executeUpdate();
 		}
 	}
 	
@@ -57,5 +64,31 @@ public class UserGroup {
 			return loadedUG;
 		}
 		return null;
+	}
+	
+	public static UserGroup[] loadAllGroups(Connection conn) throws SQLException {
+		ArrayList<UserGroup> groups = new ArrayList<UserGroup>();
+		String sql = "SELECT * FROM user_group;";
+		PreparedStatement ps = conn.prepareStatement(sql);
+		ResultSet rs = ps.executeQuery();
+		while (rs.next()) {
+			UserGroup group = new UserGroup();
+			group.id = rs.getInt("id");
+			group.name = rs.getString("name");
+			groups.add(group);
+		}
+		UserGroup[] gArray = new UserGroup[groups.size()];
+		gArray = groups.toArray(gArray);
+		return gArray;
+	}
+	
+	public void delete(Connection conn) throws SQLException {
+		if (this.id != 0) {
+			String sql = "DELETE FROM user_group WHERE id = ?;";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setInt(1, this.id);
+			ps.executeUpdate();
+			this.id = 0;
+		}
 	}
 }
