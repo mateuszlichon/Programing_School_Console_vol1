@@ -11,3 +11,22 @@ password VARCHAR(245),
 user_group_id INT(11),
 PRIMARY KEY(id),
 FOREIGN KEY(user_group_id) REFERENCES user_group(id));
+
+CREATE TABLE excercise(
+  id INT(11),
+  title VARCHAR(255),
+  description TEXT,
+  PRIMARY KEY(id)
+);
+
+CREATE TABLE solution(
+  id INT(11),
+  created DATETIME,
+  updated DATETIME,
+  description TEXT,
+  excercise_id INT(11),
+  users_id BIGINT(20),
+  PRIMARY KEY(id),
+  FOREIGN KEY(excercise_id) REFERENCES excercise(id),
+  FOREIGN KEY(users_id) REFERENCES users(id)
+);
