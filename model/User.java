@@ -68,7 +68,7 @@ public class User {
 		return id;
 	}
 
-	public void save(Connection conn) throws SQLException {
+	public void saveToDB(Connection conn) throws SQLException {
 		if(this.id == 0) {
 			String sql = "INSERT INTO users (username, email, password, user_group_id) "
 					+ "VALUES(?, ?, ?, ?);";
@@ -99,11 +99,20 @@ public class User {
 		}
 	}
 	
-	public static User getById(long id) {
-		String sql = "";
-		//execute sql         do zrobienia
-		User u = new User();
-		return u;
+	public static User getUserById(Connection conn, long id) throws SQLException {
+		String sql = "SELECT * FROM users WHERE id = ?;";
+		PreparedStatement ps = conn.prepareStatement(sql);
+		ps.setLong(1, id);
+		ResultSet rs = ps.executeQuery();
+		if (rs.next()) {
+			User loadedUser = new User();
+			loadedUser.id = rs.getLong("id");
+			loadedUser.username = rs.getString("username");
+			loadedUser.password = rs.getString("password");
+			loadedUser.email = rs.getString("email");
+			return loadedUser;
+		}
+		return null;
 	}
 	
 	public boolean checkPassword(String password) {
